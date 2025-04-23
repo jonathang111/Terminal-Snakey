@@ -5,17 +5,19 @@
 #include <termios.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <string.h>
 
 #define HEIGHT 20
 #define WIDTH 40
 #define MAX_LENGTH 100
 #define OutOfBounds (snake->body[0].y >= HEIGHT || snake->body[0].y == 0)\
 || (snake->body[0].x == 0 || snake->body[0].x >= WIDTH)
-
+#define FRAMEBUFF_SIZE ((HEIGHT+1)*(WIDTH+1)) * 4 + 64
 typedef enum {
     NONE = 0,
     SNAKE = 1,
-    APPLE = 3
+    APPLE = 3,
+    SNAKEHEAD = 4
 } Point;
 
 typedef enum {
@@ -51,7 +53,7 @@ Snake* InitalizeSnake();
 void ChangeBoard(int x, int y, Point** board, Point);
 
 //in logic loop
-void draw(Snake*, Point**);
+void draw(Point**);
 void move(Snake*, Point**);
 CollisionType CollideCheck(Snake*, Point**);
 Direction listen();

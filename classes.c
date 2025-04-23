@@ -30,13 +30,12 @@ Direction listen(){
 }
 
 void draw(Point** board){ //please fix );
-    //printf("\033[H"); //clrsrn
-    char *frame[HEIGHT][WIDTH+1];
+    char *frame[HEIGHT][WIDTH];
     for(int i = 0; i < HEIGHT; i++)
     {
         for(int p = 0; p < WIDTH; p++){
-            if((i == 0 || i == HEIGHT-1)
-            || (p == 0 || p == WIDTH))
+            if((i == 0 || i == HEIGHT) //visual glitch when HEIGHT - 1?
+            || (p == 0 || p == WIDTH-1))
                 frame[i][p] = "❚";
             else
             switch(board[i][p]){
@@ -54,21 +53,21 @@ void draw(Point** board){ //please fix );
             }
         }
     }
-    char framebuff[FRAMEBUFF_SIZE];
+    const char *symbol;
     int offset = 0;
-    offset += sprintf(&framebuff[offset], "\033[H");
+    size_t size = 0;
+    char framebuff[FRAMEBUFF_SIZE];
     for(int i = 0; i < HEIGHT; i++){
         for(int p = 0; p < WIDTH; p++){
-            const char *symbol = frame[i][p];
-            size_t len = strlen(symbol);
-            memcpy(&framebuff[offset], symbol, len);
-            offset += len;
+            symbol = frame[i][p];
+            size = strlen(symbol);
+            memcpy(&framebuff[offset], symbol, size);
+            offset += size;
         }
         framebuff[offset++] = '\n';
     }
     fwrite(framebuff, 1, offset, stdout);
-    fflush(stdout);
-    printf("\033[%d;0H", HEIGHT + 2);
+    printf("\n");
 }
 
 void move(Snake* snake, Point** board){
