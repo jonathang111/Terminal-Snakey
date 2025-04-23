@@ -29,13 +29,14 @@ Direction listen(){
     return MAINTAIN;
 }
 
-void draw(Snake* snake,Point** board){ //maybe don't need snake for draw
+void draw(Point** board){ //maybe don't need snake for draw
+    //printf("\033[H"); //clrsrn
     for(int i = 0; i < HEIGHT+1; i++)
     {
         for(int p = 0; p < WIDTH; p++){
             if((i == 0 || i == HEIGHT)
             || (p == 0 || p == WIDTH-1))
-                printf("#");
+                printf("█");
             else
             switch(board[i][p]){
                 case NONE:
@@ -44,12 +45,16 @@ void draw(Snake* snake,Point** board){ //maybe don't need snake for draw
                 case SNAKE:
                 printf("$");
                 break;
+                case SNAKEHEAD:
+                printf("^");
+                break;
                 case APPLE:
                 printf("@");
             }
         }
         printf("\n");
     }
+    fflush(stdout);//flush output to prevent visual glitch
 }
 
 void move(Snake* snake, Point** board){
@@ -74,6 +79,9 @@ void move(Snake* snake, Point** board){
             break;
             default: break; //makes compiler shut up
         }
+        if(i == 0)
+            ChangeBoard(snake->body[i].x, snake->body[i].y, board, SNAKEHEAD);
+        else
         ChangeBoard(snake->body[i].x, snake->body[i].y, board, SNAKE);
     }
 }
