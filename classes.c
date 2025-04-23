@@ -32,7 +32,11 @@ Direction listen(){
 void draw(Snake* snake,Point** board){ //maybe don't need snake for draw
     for(int i = 0; i < HEIGHT; i++)
     {
-        for(int p = 0; p < WIDTH; p++)
+        for(int p = 0; p < WIDTH; p++){
+            if((i == 0 || i == HEIGHT-1)
+            || (p == 0 || p == WIDTH-1))
+                printf("#");
+            else
             switch(board[i][p]){
                 case NONE:
                 printf(" ");
@@ -43,6 +47,7 @@ void draw(Snake* snake,Point** board){ //maybe don't need snake for draw
                 case APPLE:
                 printf("@");
             }
+        }
         printf("\n");
     }
 }
@@ -98,7 +103,7 @@ Snake* InitalizeSnake(){
 }
 
 void ChangeBoard(int x, int y, Point** board, Point type){
-    y = HEIGHT - y;
+    y = HEIGHT+1 - y;
     board[y-1][x-1] = type;
 }
 
