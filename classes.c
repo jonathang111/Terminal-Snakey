@@ -30,10 +30,10 @@ Direction listen(){
 }
 
 void draw(Snake* snake,Point** board){ //maybe don't need snake for draw
-    for(int i = 0; i < HEIGHT; i++)
+    for(int i = 0; i < HEIGHT+1; i++)
     {
         for(int p = 0; p < WIDTH; p++){
-            if((i == 0 || i == HEIGHT-1)
+            if((i == 0 || i == HEIGHT)
             || (p == 0 || p == WIDTH-1))
                 printf("#");
             else
@@ -104,7 +104,7 @@ Snake* InitalizeSnake(){
 
 void ChangeBoard(int x, int y, Point** board, Point type){
     y = HEIGHT+1 - y;
-    board[y-1][x-1] = type;
+    board[y-1][x] = type;
 }
 
 Point** InitalizeBoard(int height , int width){
