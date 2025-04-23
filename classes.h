@@ -60,7 +60,8 @@ Direction listen();
 
 //terminal reflagging
 void NonBlocking();
-void TermoisSetNonBlocking();
+void TermoisSetNonBlocking(struct termios*);
+void TermoisRestore(struct termios*);
 
 extern char seq, seq1, seq2;
 extern Direction lastdirection;

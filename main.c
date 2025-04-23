@@ -12,14 +12,18 @@ Direction lastdirection;
 int main (){
     Point** board = InitalizeBoard(HEIGHT, WIDTH);
     Snake* snake = InitalizeSnake();
-    TermoisSetNonBlocking();
+
+    struct termios* original;
+    tcgetattr(0, original);
+    TermoisSetNonBlocking(original);
     NonBlocking();
-    int test, tick = 0, debug = 0;
+    int test, tick = 0, debug = 1;
     CollisionType collide;
     //printf("\033[2J"); //clrscrn
     //printf("\033[H"); //cursor top left
     //printf("\033[?25l"); //hide cursor
     //printf("\n");
+
     while(seq != 'q'){
         usleep(100000);
         snake->direction = listen();
@@ -39,5 +43,6 @@ int main (){
         tick++;
     }
     printf("\033[?25h"); //restore cursor
-    printf("%i", tick);
+    printf("%i\n", tick);
+    TermoisRestore(original);
 }

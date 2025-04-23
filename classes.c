@@ -1,10 +1,15 @@
 #include "classes.h"
 
-void TermoisSetNonBlocking(){
+void TermoisSetNonBlocking(struct termios* original){
     struct termios term;
-    tcgetattr(0, &term);
+    term = *original;
     term.c_lflag &= ~(ICANON | ECHO);
-    tcsetattr(0, TCSANOW,&term);
+    tcsetattr(0, TCSANOW, &term);
+}
+
+void TermoisRestore(struct termios* original){
+    tcsetattr(0, TCSANOW, original);
+
 }
 
 void NonBlocking(){
