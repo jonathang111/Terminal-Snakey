@@ -9,8 +9,8 @@
 #define HEIGHT 20
 #define WIDTH 40
 #define MAX_LENGTH 100
-#define OutOfBounds (snake->body[0].y >= HEIGHT || snake->body[0].y <= 0)\
-|| (snake->body[0].x <= 0 || snake->body[0].x >= WIDTH)
+#define OutOfBounds (snake->body[0].y >= HEIGHT || snake->body[0].y <= 1)\
+|| (snake->body[0].x <= 1 || snake->body[0].x >= WIDTH)
 
 typedef enum {
     NONE = 0,
