@@ -72,6 +72,8 @@ void draw(Point** board){ //please fix );
         }
         framebuff[offset++] = '\n';
     }
+    //system("clear");
+    printf("\033c"); //use this
     fwrite(framebuff, 1, offset, stdout);
     printf("\n");
 }
@@ -103,6 +105,10 @@ void move(Snake* snake, Point** board){
         else
         ChangeBoard(snake->body[i].x, snake->body[i].y, board, SNAKE);
     }
+}
+
+void SpawnApple(Point** board){
+
 }
 
 CollisionType CollideCheck(Snake* snake, Point** board){
