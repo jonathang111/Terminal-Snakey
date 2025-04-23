@@ -12,7 +12,7 @@
 #define MAX_LENGTH 100
 #define OutOfBounds (snake->body[0].y >= HEIGHT || snake->body[0].y == 0)\
 || (snake->body[0].x == 0 || snake->body[0].x >= WIDTH)
-#define FRAMEBUFF_SIZE ((HEIGHT+1)*(WIDTH+1)) * 4 + 64
+#define FRAMEBUFF_SIZE ((HEIGHT+2)*(WIDTH+2)) * 4 + 64
 typedef enum {
     NONE = 0,
     SNAKE = 1,

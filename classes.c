@@ -30,11 +30,11 @@ Direction listen(){
 }
 
 void draw(Point** board){ //please fix );
-    char *frame[HEIGHT][WIDTH];
-    for(int i = 0; i < HEIGHT; i++)
+    char *frame[HEIGHT+2][WIDTH+2];
+    for(int i = 0; i < HEIGHT+1; i++) //height must be HEIGHT+1 for i == HEIGHT to EVER happen
     {
         for(int p = 0; p < WIDTH; p++){
-            if((i == 0 || i == HEIGHT) //visual glitch when HEIGHT - 1?
+            if((i == 0 || i == HEIGHT)
             || (p == 0 || p == WIDTH-1))
                 frame[i][p] = "❚";
             else
@@ -46,18 +46,19 @@ void draw(Point** board){ //please fix );
                 frame[i][p] = "$";
                 break;
                 case SNAKEHEAD:
-                frame[i][p] = "^";
+                frame[i][p] = "⬤";
                 break;
                 case APPLE:
                 frame[i][p] = "@";
             }
         }
+        //printf("index: %i ", i);
     }
     const char *symbol;
     int offset = 0;
     size_t size = 0;
     char framebuff[FRAMEBUFF_SIZE];
-    for(int i = 0; i < HEIGHT; i++){
+    for(int i = 0; i < HEIGHT+1; i++){ //problem was with frame render not frame to buffer
         for(int p = 0; p < WIDTH; p++){
             symbol = frame[i][p];
             size = strlen(symbol);
@@ -115,7 +116,7 @@ CollisionType CollideCheck(Snake* snake, Point** board){
 }
 
 Snake* InitalizeSnake(){
-    Snake* temp = malloc(sizeof(Snake));
+    Snake* temp = (Snake*)malloc(sizeof(Snake));
     temp->direction = START;
     temp->length = 1;
     temp->body[0].x = 20;
@@ -129,9 +130,9 @@ void ChangeBoard(int x, int y, Point** board, Point type){
 }
 
 Point** InitalizeBoard(int height , int width){
-    Point** temp = malloc((height+2) * sizeof(Point*));
+    Point** temp = (Point**)malloc((height+2) * sizeof(Point*));
     for(int i = 0; i < height+2; i++){
-        temp[i] = malloc((width+2) * sizeof(Point));
+        temp[i] = (Point*)malloc((width+2) * sizeof(Point));
     }
     return temp;
 }
