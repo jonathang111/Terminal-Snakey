@@ -1,8 +1,13 @@
 #include "classes.h"
 //notes:
-/*Only need to read the head to find crash or to find whether apple was eaten
-    right now the problem is that the y axis is resulting in seg faults. Need to 
-    investigate the move function, probably isolate the problem in the change board type.
+/*set up snake segement, set up framrate control (so vertical looks consistent w/ horiz)
+need to also set up snake eat logic, and maybe add a frame buffer for better rendering.
+Wall toggle?? would be cool
+Apple blink
+Death screen + restart option
+input buffering
+score/ speedup
+do not allow opposite directions sequentially, i.e. no up to down
 */
 char seq; //vars for listen(), didn't wanna redeclare each time.
 char seq1;
@@ -17,7 +22,7 @@ int main (){
     tcgetattr(0, original);
     TermoisSetNonBlocking(original);
     NonBlocking();
-    int test, tick = 0, debug = 1;
+    int test, tick = 0, debug = 1, applehit = 0;
     CollisionType collide;
     //printf("\033[2J"); //clrscrn
     printf("\033[H"); //cursor top left
@@ -25,15 +30,16 @@ int main (){
     //printf("\n");
 
     while(seq != 'q'){
-        usleep(30000);
-        snake->direction = listen();
+        usleep(100000);
+        snake->direction[0] = listen();
         move(snake, board);
         draw(board);
         if(debug == 1){
         printf("Collide Type: %u\n", collide);
         printf("X-Axis: %i\n", snake->body[0].x);
         printf("Y-Axis: %i\n", snake->body[0].y);
-        printf("Direction: %u\n", snake->direction);
+        printf("Direction: %u\n", snake->direction[0]);
+        printf("Apple Hits: %i\n", applehit);
         }
 
         SpawnApple(board);
@@ -41,12 +47,14 @@ int main (){
         switch(collide){
             case W:
             printf("You lose\n");
+            seq = 'q';
             break;
             case S:
             printf("You lose\n");
             break;
             case A:
-            //GrowSnake(snake);
+            applehit++;
+            GrowSnake(snake);
             SpawnApple(board);
             break;
             default: break;
@@ -54,6 +62,6 @@ int main (){
         tick++;
     }
     printf("\033[?25h"); //restore cursor
-    printf("%i\n", tick);
+    printf("Ticks: %i\n", tick);
     TermoisRestore(original);
 }

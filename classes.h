@@ -11,6 +11,8 @@
 #define HEIGHT 20
 #define WIDTH 40
 #define MAX_LENGTH 100
+#define MAX_FPS 30
+#define FRAME_DELAY 1000000 / MAX_FPS
 #define OutOfBounds (snake->body[0].y >= HEIGHT || snake->body[0].y == 0)\
 || (snake->body[0].x == 0 || snake->body[0].x >= WIDTH)
 #define FRAMEBUFF_SIZE ((HEIGHT+2)*(WIDTH+2)) * 4 + 64
@@ -18,7 +20,8 @@ typedef enum {
     NONE = 0,
     SNAKE = 1,
     APPLE = 3,
-    SNAKEHEAD = 4
+    SNAKEHEAD = 4,
+    PIVOT = 5
 } Point;
 
 typedef enum {
@@ -44,7 +47,7 @@ typedef struct {
 
 typedef struct { //need to add segment logic
     Body body[MAX_LENGTH];
-    Direction direction;
+    Direction direction[MAX_LENGTH];
     int length;
 } Snake;
 

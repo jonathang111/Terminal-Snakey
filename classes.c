@@ -24,10 +24,10 @@ Direction listen(){
         seq2 = getchar();
         if(seq1 == '['){
             switch(seq2){
-                case 'A': printf("Up\n"); lastdirection = UP; return UP;
-                case 'B': printf("Down\n"); lastdirection = DOWN; return DOWN;
-                case 'C': printf("Right\n"); lastdirection = RIGHT; return RIGHT;
-                case 'D': printf("Left\n"); lastdirection = LEFT; return LEFT;
+                case 'A': lastdirection = UP; return UP;
+                case 'B': lastdirection = DOWN; return DOWN;
+                case 'C': lastdirection = RIGHT; return RIGHT;
+                case 'D': lastdirection = LEFT; return LEFT;
             }
         }
     }
@@ -44,21 +44,15 @@ void draw(Point** board){
                 frame[i][p] = "#";//❚; flicker caused by these special chars
             else
             switch(board[i][p]){
-                case NONE:
-                frame[i][p] = " ";
-                break;
-                case SNAKE:
-                frame[i][p] = "$";
-                break;
-                case SNAKEHEAD:
-                frame[i][p] = "O"; //⬤
-                break;
-                case APPLE:
-                frame[i][p] = "@";
+                case NONE:      frame[i][p] = " "; break;
+                case SNAKE:     frame[i][p] = "$"; break;
+                case SNAKEHEAD: frame[i][p] = "O"; break;
+                case APPLE:     frame[i][p] = "@";
             }
         }
         //printf("index: %i ", i);
     }
+    //write to buffer
     const char *symbol;
     int offset = 0;
     size_t size = 0;
@@ -73,7 +67,7 @@ void draw(Point** board){
         framebuff[offset++] = '\n';
     }
     //system("clear");
-    //printf("\033c"); //use this
+    //printf("\033c"); //use this; no ):<
     printf("\033[H");  //cursor top left
     printf("\033[J"); //clearscreen
     fwrite(framebuff, 1, offset, stdout);
@@ -81,13 +75,14 @@ void draw(Point** board){
 }
 
 void move(Snake* snake, Point** board){
-    if(snake->direction == START)
+    //for head logic only
+    if(snake->direction[0] == START)
         return;
-    if(snake->direction == MAINTAIN)
-        snake->direction = lastdirection;
+    if(snake->direction[0] == MAINTAIN)
+        snake->direction[0] = lastdirection;
     for(int i = 0; i < snake->length; i++){
         ChangeBoard(snake->body[i].x, snake->body[i].y, board, NONE);
-        switch(snake->direction){
+        switch(snake->direction[i]){
             case UP:
             snake->body[i].y = snake->body[i].y + 1;
             break;
@@ -114,7 +109,7 @@ void SpawnApple(Point** board){
 }
 
 CollisionType CollideCheck(Snake* snake, Point** board){
-    if(OutOfBounds) //most important thing
+    if(OutOfBounds) //most important thing, maybe add toggle
         return W;
     
     Point type = board[(HEIGHT - snake->body[0].y)][snake->body[0].x];
@@ -133,28 +128,35 @@ void GrowSnake(Snake* snake){
     int prev_y = snake->body[length].y;
     int prev_x = snake->body[length].x;
 
-    for(int i = 0; i < snake->length; i++){
-    switch(snake->direction){
+    switch(snake->direction[length]){ //not sure if this is what i want
         case UP:
-        snake->body[i].y = snake->body[i].y + 1;
+        snake->body[length+1].y = prev_y - 1;
+        snake->body[length+1].x = prev_x;
+        snake->direction[length+1] = UP;
         break;
         case DOWN:
-        snake->body[i].y = snake->body[i].y - 1;
+        snake->body[length+1].y = prev_y + 1;
+        snake->body[length+1].x = prev_x;
+        snake->direction[length+1] = DOWN;
         break;
         case RIGHT:
-        snake->body[i].x = snake->body[i].x + 1;
+        snake->body[length+1].x = prev_x - 1;
+        snake->body[length+1].y = prev_y;
+        snake->direction[length+1] = RIGHT;
         break;
         case LEFT:
-        snake->body[i].x = snake->body[i].x - 1;
+        snake->body[length+1].x = prev_x + 1;
+        snake->body[length+1].y = prev_y;
+        snake->direction[length+1] = LEFT;
         break;
-        default: break; //makes compiler shut up
+        default: break;
     }
-    }
+    snake->length++;
 }
 
 Snake* InitalizeSnake(){
     Snake* temp = (Snake*)malloc(sizeof(Snake));
-    temp->direction = START;
+    temp->direction[0] = START;
     temp->length = 1;
     temp->body[0].x = 20;
     temp->body[0].y = 10;
