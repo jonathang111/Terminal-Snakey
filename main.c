@@ -17,18 +17,21 @@ Direction lastdirection;
 int main (){
     Point** board = InitalizeBoard(HEIGHT, WIDTH);
     Snake* snake = InitalizeSnake();
+    Pivot* pivots = (Pivot*)malloc(sizeof(Pivot*) * MAX_PIVOT);
+    int test, tick = 0, debug = 1, applehit = 0;
+    CollisionType collide;
 
     struct termios* original = (struct termios*)malloc(sizeof(struct termios*));
     tcgetattr(0, original);
     TermoisSetNonBlocking(original);
     NonBlocking();
-    int test, tick = 0, debug = 1, applehit = 0;
-    CollisionType collide;
+
     //printf("\033[2J"); //clrscrn
     printf("\033[H"); //cursor top left
     printf("\033[?25l"); //hide cursor
     //printf("\n");
 
+    //main logic loop
     while(seq != 'q'){
         usleep(100000);
         snake->direction[0] = listen();
@@ -44,7 +47,7 @@ int main (){
 
         SpawnApple(board);
         collide = CollideCheck(snake, board);
-        switch(collide){
+        switch(collide){ //make function instead?
             case W:
             printf("You lose\n");
             seq = 'q';

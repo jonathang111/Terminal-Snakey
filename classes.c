@@ -163,6 +163,17 @@ Snake* InitalizeSnake(){
     return temp;
 }
 
+void SpawnPivot(Pivot* pivots, Direction direction, int x, int y){
+    if(pivots->size == MAX_PIVOT)
+        return;
+    Pivot temp;
+    temp.direction = direction;
+    temp.x = x;
+    temp.y = y;
+    pivots[pivots->size] = temp;
+    pivots->size++;
+}
+
 void ChangeBoard(int x, int y, Point** board, Point type){
     y = HEIGHT+1 - y;
     board[y-1][x] = type;
