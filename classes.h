@@ -6,6 +6,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <string.h>
+#include <time.h>
 
 #define HEIGHT 20
 #define WIDTH 40
@@ -41,7 +42,7 @@ typedef struct {
     int y;
 } Body;
 
-typedef struct {
+typedef struct { //need to add segment logic
     Body body[MAX_LENGTH];
     Direction direction;
     int length;
@@ -51,12 +52,14 @@ typedef struct {
 Point** InitalizeBoard(int, int);
 Snake* InitalizeSnake();
 void ChangeBoard(int x, int y, Point** board, Point);
+void SpawnApple(Point**);
 
 //in logic loop
 void draw(Point**);
 void move(Snake*, Point**);
 CollisionType CollideCheck(Snake*, Point**);
 Direction listen();
+void GrowSnake(Snake*);
 
 //terminal reflagging
 void NonBlocking();

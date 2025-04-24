@@ -34,9 +34,9 @@ Direction listen(){
     return MAINTAIN;
 }
 
-void draw(Point** board){ //please fix );
+void draw(Point** board){
     char *frame[HEIGHT+2][WIDTH+2];
-    for(int i = 0; i < HEIGHT+1; i++) //height must be HEIGHT+1 for i == HEIGHT to EVER happen
+    for(int i = 0; i < HEIGHT+1; i++)
     {
         for(int p = 0; p < WIDTH; p++){
             if((i == 0 || i == HEIGHT)
@@ -63,7 +63,7 @@ void draw(Point** board){ //please fix );
     int offset = 0;
     size_t size = 0;
     char framebuff[FRAMEBUFF_SIZE];
-    for(int i = 0; i < HEIGHT+1; i++){ //problem was with frame render not frame to buffer
+    for(int i = 0; i < HEIGHT+1; i++){
         for(int p = 0; p < WIDTH; p++){
             symbol = frame[i][p];
             size = strlen(symbol);
@@ -75,7 +75,7 @@ void draw(Point** board){ //please fix );
     //system("clear");
     printf("\033c"); //use this
     fwrite(framebuff, 1, offset, stdout);
-    printf("\n");
+    //printf("\n");
 }
 
 void move(Snake* snake, Point** board){
@@ -108,14 +108,14 @@ void move(Snake* snake, Point** board){
 }
 
 void SpawnApple(Point** board){
-
+    board[10][24] = APPLE;
 }
 
 CollisionType CollideCheck(Snake* snake, Point** board){
     if(OutOfBounds) //most important thing
         return W;
     
-    Point type = board[(HEIGHT - snake->body[0].y) - 1][snake->body[0].x - 1];
+    Point type = board[(HEIGHT - snake->body[0].y)][snake->body[0].x];
     switch(type){
         case SNAKE:
         return S;
@@ -124,6 +124,29 @@ CollisionType CollideCheck(Snake* snake, Point** board){
         default: break; //also make compiler shut up
     }
     return N;
+}
+
+void GrowSnake(Snake* snake){
+    int length = snake->length-1;
+    int prev_y = snake.body[length].y;
+    int prev_x = snake.body[length].x;
+
+    
+    switch(snake->direction){
+        case UP:
+        snake->body[i].y = snake->body[i].y + 1;
+        break;
+        case DOWN:
+        snake->body[i].y = snake->body[i].y - 1;
+        break;
+        case RIGHT:
+        snake->body[i].x = snake->body[i].x + 1;
+        break;
+        case LEFT:
+        snake->body[i].x = snake->body[i].x - 1;
+        break;
+        default: break; //makes compiler shut up
+    }
 }
 
 Snake* InitalizeSnake(){

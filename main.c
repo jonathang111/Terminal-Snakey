@@ -20,8 +20,8 @@ int main (){
     int test, tick = 0, debug = 1;
     CollisionType collide;
     //printf("\033[2J"); //clrscrn
-    //printf("\033[H"); //cursor top left
-    //printf("\033[?25l"); //hide cursor
+    printf("\033[H"); //cursor top left
+    printf("\033[?25l"); //hide cursor
     //printf("\n");
 
     while(seq != 'q'){
@@ -35,10 +35,21 @@ int main (){
         printf("Y-Axis: %i\n", snake->body[0].y);
         printf("Direction: %u\n", snake->direction);
         }
+
+        SpawnApple(board);
         collide = CollideCheck(snake, board);
-        if(collide == W){
+        switch(collide){
+            case W:
             printf("You lose\n");
             break;
+            case S:
+            printf("You lose\n");
+            break;
+            case A:
+            //GrowSnake(snake);
+            SpawnApple(board);
+            break;
+            default: break;
         }
         tick++;
     }
