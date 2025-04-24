@@ -13,7 +13,7 @@ int main (){
     Point** board = InitalizeBoard(HEIGHT, WIDTH);
     Snake* snake = InitalizeSnake();
 
-    struct termios* original;
+    struct termios* original = (struct termios*)malloc(sizeof(struct termios*));
     tcgetattr(0, original);
     TermoisSetNonBlocking(original);
     NonBlocking();
@@ -25,7 +25,7 @@ int main (){
     //printf("\n");
 
     while(seq != 'q'){
-        usleep(100000);
+        usleep(30000);
         snake->direction = listen();
         move(snake, board);
         draw(board);

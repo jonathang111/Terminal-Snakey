@@ -41,7 +41,7 @@ void draw(Point** board){
         for(int p = 0; p < WIDTH; p++){
             if((i == 0 || i == HEIGHT)
             || (p == 0 || p == WIDTH-1))
-                frame[i][p] = "❚";
+                frame[i][p] = "#";//❚; flicker caused by these special chars
             else
             switch(board[i][p]){
                 case NONE:
@@ -51,7 +51,7 @@ void draw(Point** board){
                 frame[i][p] = "$";
                 break;
                 case SNAKEHEAD:
-                frame[i][p] = "⬤";
+                frame[i][p] = "O"; //⬤
                 break;
                 case APPLE:
                 frame[i][p] = "@";
@@ -73,7 +73,9 @@ void draw(Point** board){
         framebuff[offset++] = '\n';
     }
     //system("clear");
-    printf("\033c"); //use this
+    //printf("\033c"); //use this
+    printf("\033[H");  //cursor top left
+    printf("\033[J"); //clearscreen
     fwrite(framebuff, 1, offset, stdout);
     //printf("\n");
 }
@@ -128,10 +130,10 @@ CollisionType CollideCheck(Snake* snake, Point** board){
 
 void GrowSnake(Snake* snake){
     int length = snake->length-1;
-    int prev_y = snake.body[length].y;
-    int prev_x = snake.body[length].x;
+    int prev_y = snake->body[length].y;
+    int prev_x = snake->body[length].x;
 
-    
+    for(int i = 0; i < snake->length; i++){
     switch(snake->direction){
         case UP:
         snake->body[i].y = snake->body[i].y + 1;
@@ -146,6 +148,7 @@ void GrowSnake(Snake* snake){
         snake->body[i].x = snake->body[i].x - 1;
         break;
         default: break; //makes compiler shut up
+    }
     }
 }
 

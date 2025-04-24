@@ -1,0 +1,26 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Debug Snake Game",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/snake_game",
+        "args": [],
+        "stopAtEntry": false,
+        "cwd": "${workspaceFolder}",
+        "environment": [],
+        "externalConsole": true,
+        "MIMode": "lldb",              // use "gdb" if you're on Linux
+        "preLaunchTask": "Build Snake Game",
+        "setupCommands": [
+          {
+            "description": "Enable pretty-printing for gdb/lldb",
+            "text": "settings set target.pretty-printing true",
+            "ignoreFailures": true
+          }
+        ]
+      }
+    ]
+  }
+  
