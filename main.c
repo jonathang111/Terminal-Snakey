@@ -21,7 +21,7 @@ int main (int argc, char* argv[]){
     int test, tick = 0, debug = argc-1, applehit = 0, oldx = -1, oldy = -1;
     CollisionType collide;
 
-    struct termios* original = (struct termios*)malloc(sizeof(struct termios*));
+    struct termios* original = (struct termios*)malloc(sizeof(struct termios));
     tcgetattr(0, original);
     TermoisSetNonBlocking(original);
     NonBlocking();
