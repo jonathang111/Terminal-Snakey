@@ -137,21 +137,22 @@ void move(Snake* snake, Point** board, Pivots* pivots){
 }
 
 void SpawnApple(Point** board){
-    board[10][24] = APPLE;
+    do{
+        apple_x = (rand() % WIDTH);
+        apple_y = (rand() % HEIGHT)+1;
+    } while(board[apple_y][apple_x] != NONE);
+    board[apple_y][apple_x] = APPLE; //for drawing
 }
 
 CollisionType CollideCheck(Snake* snake, Point** board){
     if(OutOfBounds) //most important thing, maybe add toggle
         return W;
     
-    Point type = board[(HEIGHT - snake->body[0].y)][snake->body[0].x];
-    switch(type){
-        case SNAKE:
-        return S;
-        case APPLE:
+    if(snake->body[0].x == apple_x && snake->body[0].y == HEIGHT - apple_y)
         return A;
-        default: break; //also make compiler shut up
-    }
+    Point type = board[(HEIGHT - snake->body[0].y)][snake->body[0].x];
+    if(type == SNAKE)
+        return S;
     return N;
 }
 

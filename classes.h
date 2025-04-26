@@ -20,7 +20,7 @@
 typedef enum {
     NONE = 0,
     SNAKE = 1,
-    APPLE = 3,
+    APPLE = 3, //may not need apple. Do need for drawing
     SNAKEHEAD = 4,
 } Point;
 
@@ -85,5 +85,6 @@ void TermoisSetNonBlocking(struct termios*);
 void TermoisRestore(struct termios*);
 
 extern char seq, seq1, seq2;
+extern int apple_x, apple_y;
 extern Direction lastdirection;
 #endif

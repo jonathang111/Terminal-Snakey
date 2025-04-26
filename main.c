@@ -7,19 +7,18 @@ Apple blink
 Death screen + restart option
 input buffering
 score/ speedup
-do not allow opposite directions sequentially, i.e. no up to down
 */
-char seq; //vars for listen(), didn't wanna redeclare each time.
-char seq1;
-char seq2;
+char seq, seq1 , seq2;
+int apple_x, apple_y;
 Direction lastdirection;
 
-int main (){
+int main (int argc, char* argv[]){
+    srand(time(NULL)); //for apple spawn
     Point** board = InitalizeBoard(HEIGHT, WIDTH);
     Snake* snake = InitalizeSnake();
     Pivots* pivots = (Pivots*)malloc(sizeof(Pivots));
     pivots->size = 0;
-    int test, tick = 0, debug = 1, applehit = 0;
+    int test, tick = 0, debug = argc-1, applehit = 0;
     CollisionType collide;
 
     struct termios* original = (struct termios*)malloc(sizeof(struct termios*));
@@ -32,6 +31,7 @@ int main (){
     printf("\033[?25l"); //hide cursor
     //printf("\n");
 
+    SpawnApple(board);
     //main logic loop
     while(seq != 'q'){
         usleep(100000);
@@ -42,14 +42,14 @@ int main (){
         printf("Collide Type: %u\n", collide);
         printf("X-Axis: %i\n", snake->body[0].x);
         printf("Y-Axis: %i\n", snake->body[0].y);
-        printf("Snake Size: %i", snake->length);
+        printf("Snake Size: %i\n", snake->length);
         printf("Direction: %u\n", snake->direction[0]);
         printf("Apple Hits: %i\n", applehit);
+        printf("Apple Coords: x: %i  y: %i\n", apple_x, apple_y);
         printf("Pivots: %i\n", pivots->size);
         printf("Pivot 1: x: %i  y: %i\n",pivots->data[0].x, pivots->data[0].y);
-        printf("Pivot 2: x: %i  y: %i\n",pivots->data[1].x, pivots->data[1].y);
+        //printf("Pivot 2: x: %i  y: %i\n",pivots->data[1].x, pivots->data[1].y);
         }
-        SpawnApple(board);
         collide = CollideCheck(snake, board);
         switch(collide){ //make function instead?
             case W:
@@ -58,6 +58,7 @@ int main (){
             break;
             case S:
             printf("You lose\n");
+            seq = 'q';
             break;
             case A:
             applehit++;
