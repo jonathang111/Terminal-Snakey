@@ -23,11 +23,20 @@ Direction listen(){
         seq1 = getchar();
         seq2 = getchar();
         if(seq1 == '['){
+
             switch(seq2){
-                case 'A': lastdirection = UP; return UP;
-                case 'B': lastdirection = DOWN; return DOWN;
-                case 'C': lastdirection = RIGHT; return RIGHT;
-                case 'D': lastdirection = LEFT; return LEFT;
+                case 'A': 
+                    if(lastdirection == DOWN) break;
+                    lastdirection = UP; return UP;
+                case 'B': 
+                    if(lastdirection == UP) break;
+                    lastdirection = DOWN; return DOWN;
+                case 'C': 
+                    if(lastdirection == LEFT) break;
+                    lastdirection = RIGHT; return RIGHT;
+                case 'D':
+                    if(lastdirection == RIGHT) break;
+                    lastdirection = LEFT; return LEFT;
             }
         }
     }
