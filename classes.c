@@ -82,6 +82,12 @@ Direction PivotCheck(int x, int y, Pivots* pivots){
     return MAINTAIN;
 }
 
+void RemoveOldestPivot(Pivots* pivots){ //shift pivots left
+    for(int i = 0; i < pivots->size; i++)
+        pivots->data[i] = pivots->data[i+1];
+    pivots->size--;
+}
+
 void move(Snake* snake, Point** board, Pivots* pivots){
     //for head logic only
     Direction temp = MAINTAIN;
@@ -95,13 +101,11 @@ void move(Snake* snake, Point** board, Pivots* pivots){
     for(int i = 0; i < snake->length; i++){
         ChangeBoard(snake->body[i].x, snake->body[i].y, board, NONE); //maybe only update head/tail
         //pivot logic.
-        if(i == snake->length-1){
-            temp = PivotCheck(snake->body[i].x, snake->body[i].y, pivots);
-            if(temp != MAINTAIN)
+        temp = PivotCheck(snake->body[i].x, snake->body[i].y, pivots);
+        if(temp != MAINTAIN)
                 snake->direction[i] = temp;
-            if(i == snake->length - 1 && temp != MAINTAIN)
-                pivots->size--;
-        }
+        if(i == snake->length - 1 && temp != MAINTAIN)
+            RemoveOldestPivot(pivots);
 
         //move update
         switch(snake->direction[i]){

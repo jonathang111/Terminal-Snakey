@@ -70,6 +70,7 @@ void ChangeBoard(int x, int y, Point** board, Point);
 void SpawnApple(Point**);
 void SpawnPivot(Pivots*, Direction, int, int);
 Direction PivotCheck(int x, int y, Pivots*);
+void RemoveOldestPivot(Pivots*);
 
 //in logic loop
 void draw(Point**);

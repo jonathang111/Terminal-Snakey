@@ -42,11 +42,13 @@ int main (){
         printf("Collide Type: %u\n", collide);
         printf("X-Axis: %i\n", snake->body[0].x);
         printf("Y-Axis: %i\n", snake->body[0].y);
+        printf("Snake Size: %i", snake->length);
         printf("Direction: %u\n", snake->direction[0]);
         printf("Apple Hits: %i\n", applehit);
         printf("Pivots: %i\n", pivots->size);
+        printf("Pivot 1: x: %i  y: %i\n",pivots->data[0].x, pivots->data[0].y);
+        printf("Pivot 2: x: %i  y: %i\n",pivots->data[1].x, pivots->data[1].y);
         }
-
         SpawnApple(board);
         collide = CollideCheck(snake, board);
         switch(collide){ //make function instead?
