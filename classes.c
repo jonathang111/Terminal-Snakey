@@ -9,7 +9,6 @@ void TermoisSetNonBlocking(struct termios* original){
 
 void TermoisRestore(struct termios* original){
     tcsetattr(0, TCSANOW, original);
-
 }
 
 void NonBlocking(){
@@ -43,13 +42,13 @@ Direction listen(){
     return MAINTAIN;
 }
 
-void draw(Point** board){
+void draw(Point** board){ //drawing at x = 39, need to move to 40
     char *frame[HEIGHT+2][WIDTH+2];
     for(int i = 0; i < HEIGHT+1; i++)
     {
-        for(int p = 0; p < WIDTH; p++){
+        for(int p = 0; p < WIDTH+1; p++){
             if((i == 0 || i == HEIGHT)
-            || (p == 0 || p == WIDTH-1))
+            || (p == 0 || p == WIDTH))
                 frame[i][p] = "#";//❚; flicker caused by these special chars
             else
             switch(board[i][p]){
@@ -67,7 +66,7 @@ void draw(Point** board){
     size_t size = 0;
     char framebuff[FRAMEBUFF_SIZE];
     for(int i = 0; i < HEIGHT+1; i++){
-        for(int p = 0; p < WIDTH; p++){
+        for(int p = 0; p < WIDTH+1; p++){
             symbol = frame[i][p];
             size = strlen(symbol);
             memcpy(&framebuff[offset], symbol, size);
@@ -138,8 +137,8 @@ void move(Snake* snake, Point** board, Pivots* pivots){
 
 void SpawnApple(Point** board){
     do{
-        apple_x = (rand() % WIDTH);
-        apple_y = (rand() % HEIGHT)+1;
+        apple_x = (rand() % (WIDTH-1)) + 1;
+        apple_y = (rand() % (HEIGHT - 1)) + 1;
     } while(board[apple_y][apple_x] != NONE);
     board[apple_y][apple_x] = APPLE; //for drawing
 }

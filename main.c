@@ -18,7 +18,7 @@ int main (int argc, char* argv[]){
     Snake* snake = InitalizeSnake();
     Pivots* pivots = (Pivots*)malloc(sizeof(Pivots));
     pivots->size = 0;
-    int test, tick = 0, debug = argc-1, applehit = 0;
+    int test, tick = 0, debug = argc-1, applehit = 0, oldx = -1, oldy = -1;
     CollisionType collide;
 
     struct termios* original = (struct termios*)malloc(sizeof(struct termios*));
@@ -39,15 +39,15 @@ int main (int argc, char* argv[]){
         move(snake, board, pivots);
         draw(board);
         if(debug == 1){
-        printf("Collide Type: %u\n", collide);
+        //printf("Collide Type: %u\n", collide);
         printf("X-Axis: %i\n", snake->body[0].x);
         printf("Y-Axis: %i\n", snake->body[0].y);
-        printf("Snake Size: %i\n", snake->length);
-        printf("Direction: %u\n", snake->direction[0]);
-        printf("Apple Hits: %i\n", applehit);
-        printf("Apple Coords: x: %i  y: %i\n", apple_x, apple_y);
-        printf("Pivots: %i\n", pivots->size);
-        printf("Pivot 1: x: %i  y: %i\n",pivots->data[0].x, pivots->data[0].y);
+        //printf("Snake Size: %i\n", snake->length);
+        //printf("Direction: %u\n", snake->direction[0]);
+        //printf("Apple Hits: %i\n", applehit);
+        printf("Apple Coords: x: %i  y: %i\n", oldx, oldy);
+        //printf("Pivots: %i\n", pivots->size);
+        //printf("Pivot 1: x: %i  y: %i\n",pivots->data[0].x, pivots->data[0].y);
         //printf("Pivot 2: x: %i  y: %i\n",pivots->data[1].x, pivots->data[1].y);
         }
         collide = CollideCheck(snake, board);
@@ -62,8 +62,9 @@ int main (int argc, char* argv[]){
             break;
             case A:
             applehit++;
-            GrowSnake(snake);
-            SpawnApple(board);
+            GrowSnake(snake); SpawnApple(board);
+            oldx = apple_x;
+            oldy = apple_y;
             break;
             default: break;
         }
