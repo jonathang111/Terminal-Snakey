@@ -74,33 +74,52 @@ void draw(Point** board){
     //printf("\n");
 }
 
-void move(Snake* snake, Point** board){
+Direction PivotCheck(int x, int y, Pivots* pivots){
+    for(int p = 0; p < pivots->size; p++)
+        if(x == pivots->data[p].x && y == pivots->data[p].y){
+            return pivots->data[p].direction;
+        } 
+    return MAINTAIN;
+}
+
+void move(Snake* snake, Point** board, Pivots* pivots){
     //for head logic only
+    Direction temp = MAINTAIN;
     if(snake->direction[0] == START)
         return;
     if(snake->direction[0] == MAINTAIN)
         snake->direction[0] = lastdirection;
+    else
+        SpawnPivot(pivots, snake->direction[0], snake->body[0].x, snake->body[0].y); //pivots->size +1 in func, +2 once return?
+
     for(int i = 0; i < snake->length; i++){
-        ChangeBoard(snake->body[i].x, snake->body[i].y, board, NONE);
+        ChangeBoard(snake->body[i].x, snake->body[i].y, board, NONE); //maybe only update head/tail
+        //pivot logic.
+        if(i == snake->length-1){
+            temp = PivotCheck(snake->body[i].x, snake->body[i].y, pivots);
+            if(temp != MAINTAIN)
+                snake->direction[i] = temp;
+            if(i == snake->length - 1 && temp != MAINTAIN)
+                pivots->size--;
+        }
+
+        //move update
         switch(snake->direction[i]){
-            case UP:
-            snake->body[i].y = snake->body[i].y + 1;
+            case UP: snake->body[i].y = snake->body[i].y + 1;
             break;
-            case DOWN:
-            snake->body[i].y = snake->body[i].y - 1;
+            case DOWN: snake->body[i].y = snake->body[i].y - 1;
             break;
-            case RIGHT:
-            snake->body[i].x = snake->body[i].x + 1;
+            case RIGHT: snake->body[i].x = snake->body[i].x + 1;
             break;
-            case LEFT:
-            snake->body[i].x = snake->body[i].x - 1;
+            case LEFT: snake->body[i].x = snake->body[i].x - 1;
             break;
             default: break; //makes compiler shut up
         }
+        //update for draw()
         if(i == 0)
             ChangeBoard(snake->body[i].x, snake->body[i].y, board, SNAKEHEAD);
         else
-        ChangeBoard(snake->body[i].x, snake->body[i].y, board, SNAKE);
+            ChangeBoard(snake->body[i].x, snake->body[i].y, board, SNAKE);
     }
 }
 
@@ -128,7 +147,7 @@ void GrowSnake(Snake* snake){
     int prev_y = snake->body[length].y;
     int prev_x = snake->body[length].x;
 
-    switch(snake->direction[length]){ //not sure if this is what i want
+    switch(snake->direction[length]){
         case UP:
         snake->body[length+1].y = prev_y - 1;
         snake->body[length+1].x = prev_x;
@@ -163,14 +182,14 @@ Snake* InitalizeSnake(){
     return temp;
 }
 
-void SpawnPivot(Pivot* pivots, Direction direction, int x, int y){
+void SpawnPivot(Pivots* pivots, Direction direction, int x, int y){
     if(pivots->size == MAX_PIVOT)
         return;
     Pivot temp;
     temp.direction = direction;
     temp.x = x;
     temp.y = y;
-    pivots[pivots->size] = temp;
+    pivots->data[pivots->size] = temp;
     pivots->size++;
 }
 

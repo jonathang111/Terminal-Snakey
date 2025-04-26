@@ -17,7 +17,8 @@ Direction lastdirection;
 int main (){
     Point** board = InitalizeBoard(HEIGHT, WIDTH);
     Snake* snake = InitalizeSnake();
-    Pivot* pivots = (Pivot*)malloc(sizeof(Pivot*) * MAX_PIVOT);
+    Pivots* pivots = (Pivots*)malloc(sizeof(Pivots));
+    pivots->size = 0;
     int test, tick = 0, debug = 1, applehit = 0;
     CollisionType collide;
 
@@ -35,7 +36,7 @@ int main (){
     while(seq != 'q'){
         usleep(100000);
         snake->direction[0] = listen();
-        move(snake, board);
+        move(snake, board, pivots);
         draw(board);
         if(debug == 1){
         printf("Collide Type: %u\n", collide);
@@ -43,6 +44,7 @@ int main (){
         printf("Y-Axis: %i\n", snake->body[0].y);
         printf("Direction: %u\n", snake->direction[0]);
         printf("Apple Hits: %i\n", applehit);
+        printf("Pivots: %i\n", pivots->size);
         }
 
         SpawnApple(board);

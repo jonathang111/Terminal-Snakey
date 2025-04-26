@@ -49,9 +49,13 @@ typedef struct {
 typedef struct {
     int x;
     int y;
-    int size;
     Direction direction;
 } Pivot;
+
+typedef struct {
+    int size;
+    Pivot data[MAX_PIVOT]; //data holds pivot info, x, y, direction
+} Pivots;
 
 typedef struct { //need to add segment logic
     Body body[MAX_LENGTH];
@@ -64,11 +68,12 @@ Point** InitalizeBoard(int, int);
 Snake* InitalizeSnake();
 void ChangeBoard(int x, int y, Point** board, Point);
 void SpawnApple(Point**);
-void SpawnPivot(Pivot*, Direction, int, int);
+void SpawnPivot(Pivots*, Direction, int, int);
+Direction PivotCheck(int x, int y, Pivots*);
 
 //in logic loop
 void draw(Point**);
-void move(Snake*, Point**);
+void move(Snake*, Point**, Pivots*);
 CollisionType CollideCheck(Snake*, Point**);
 Direction listen();
 void GrowSnake(Snake*);
