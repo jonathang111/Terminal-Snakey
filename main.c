@@ -1,12 +1,13 @@
 #include "classes.h"
 //notes:
-/*set up snake segement, set up framrate control (so vertical looks consistent w/ horiz)
-need to also set up snake eat logic, and maybe add a frame buffer for better rendering.
+/*
+set up framrate control (so vertical looks consistent w/ horiz)
+add a frame buffer for better rendering (i.e. frame cache').
 Wall toggle?? would be cool
 Apple blink
 Death screen + restart option
-input buffering
-score/ speedup
+input buffering (prevent holding arrow from filling buffer)
+higher score  =  speedup
 */
 char seq, seq1 , seq2;
 int apple_x, apple_y;
@@ -68,6 +69,7 @@ int main (int argc, char* argv[]){
             break;
             default: break;
         }
+        printf("Apples Eaten: %i\n", applehit);
         tick++;
     }
     printf("\033[?25h"); //restore cursor
